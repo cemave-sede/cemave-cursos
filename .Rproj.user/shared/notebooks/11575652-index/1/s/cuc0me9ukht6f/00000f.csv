@@ -1,5 +1,0 @@
-"0","ggplotly(G17)
-"
-"2","Error in rep(value[[k]], length.out = n) : 
-  attempt to replicate an object of type 'closure'
-"

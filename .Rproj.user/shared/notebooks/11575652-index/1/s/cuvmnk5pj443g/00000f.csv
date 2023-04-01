@@ -1,4 +1,0 @@
-"0","dados_mapa_regiao = regioes_sf %>% 
-    left_join(cursos_regiao)
-"
-"2","Joining with `by = join_by(regiao)`"

@@ -1,9 +1,0 @@
-"0","regioes_sf <- rename(regioes_sf, nome = regiao)
-"
-"1","[1m[33mError[39m in `rename()`:[22m
-[33m![39m Can't rename columns that don't exist.
-[31m✖[39m Column `regiao` doesn't exist.
-Backtrace:
-[90m 1. [39m[1mdplyr[22m::rename(regioes_sf, nome = regiao)
-[90m 2. [39m[1m[94msf:::rename.sf([39m[22mregioes_sf, nome = regiao[1m[94m)[39m[22m
-"

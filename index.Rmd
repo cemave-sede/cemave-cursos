@@ -4,6 +4,7 @@ output:
   flexdashboard::flex_dashboard:
     orientation: rows
     vertical_layout: fill
+    storyboard: TRUE
     theme: cerulean
     social: ["menu"]
     navbar:
@@ -322,7 +323,7 @@ tempo.decada <- data.frame(
 G7 <- tempo.decada %>%
     ggplot( aes(x = decada, y = cursos)) +
     geom_col(color = "#e9ecef",  fill="#69b3a2") +
-    geom_text(aes(label = cursos), vjust = -5, size = 3) +
+    geom_text(aes(label = cursos)) +
     ylim(0, 45) +
     scale_x_discrete(name = " ") +
     scale_y_continuous(name = " ") +
@@ -337,8 +338,6 @@ G7 <- tempo.decada %>%
    
     
 ggplotly(G7)
-
-
 
 ```
 
@@ -374,12 +373,6 @@ ggplotly(G8)
 ### **Cursos por região**
 
 ```{r}
-# -------------------------  Cursos por região
-
-# cursos.regiao <- data.frame(
-#   regiao=c("Centro-Oeste", "Nordeste", "Sul", "Sudeste", "Norte"),
-#   cursos=c(18, 11, 9, 5, 0)
-# )
 
 coul5 <- brewer.pal(5, "Pastel2")
 
@@ -434,8 +427,6 @@ ggplotly(G9)
 
 
 
-
-
 Alunos
 =========================
 
@@ -475,8 +466,6 @@ ggplotly(G2)
 ```{r imagem Cursistas por gênero}
 
 # --------------------  Cursistas por gênero
-
-#alunos <- rename(data, c("1" = "Tree1", "2" = "Tree2", "3" = "Tree3", "4" = "Tree4", "5" = "Tree5"))
 
 G10 <- alunos %>%
         mutate(genero = ifelse(genero == "M", "Homem", "Mulher")) %>% 
@@ -604,9 +593,9 @@ ggplotly(G13)
 ```
 
 
-### **Alunos por país**
+### **Alunos estrangeiros**
 
-```{r imagem Alunos por país}
+```{r imagem Alunos estrangeiros}
 
 # ---------------------------  Alunos por país
 
@@ -615,11 +604,12 @@ ggplotly(G13)
 #   alunos = c(878, 8, 3, 1)
 # )
 
-coul3 <- brewer.pal(7, "Pastel2")
+coul3 <- brewer.pal(6, "Pastel2")
 
 
 G14 <-  alunos %>%
-        filter(!is.na(pais)) %>% 
+        filter(!is.na(pais)) %>%
+        filter(pais != "Brasil") %>% 
         group_by(pais) %>%
         summarise(count = n()) %>% 
 
@@ -627,14 +617,15 @@ G14 <-  alunos %>%
         geom_col(color = "#e9ecef",  fill= coul3) +
         scale_x_discrete(name = "") +
         scale_y_continuous(name = " ") +
-        scale_y_log10(name = " ") +
+        #scale_y_log10(name = " ") +
         theme_minimal() +
         theme(
         panel.grid.minor.y = element_blank(),
         panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank(),
         panel.grid.major.x = element_blank(),
-        )
+        ) +
+        scale_y_continuous(breaks = seq(0, 10, by = 2), name = " ")
    
 ggplotly(G14)
 
@@ -811,6 +802,10 @@ cursos_regiao <- data.frame(
 dados_mapa_regiao = regioes_sf %>% 
     left_join(cursos_regiao)
 
+
+legendas_regiao <- dados_mapa_regiao %>% mutate(popup_info = paste (regiao)) # criando uma coluna na tabela de dados com os dados que serão mostrados na janela popup
+
+
 # dados_mapa_regiao <- dados_mapa_regiao %>% st_transform(4326)
 
 bins <- c(0, 10, 20, 30, 40)
@@ -820,7 +815,8 @@ labels <- sprintf("<strong>%s</strong>", dados_mapa_regiao$cursos) %>% lapply(ht
 
 mapa_cursos_regiao <- dados_mapa_regiao %>% 
     leaflet() %>%
-  
+    setView(lng = -58, lat = -14,
+           zoom = 4) %>%
     addPolygons(stroke = TRUE,
               opacity = 1.0,
               fillOpacity = 1.0,
@@ -829,6 +825,7 @@ mapa_cursos_regiao <- dados_mapa_regiao %>%
               fillColor = ~qpal2(dados_mapa_regiao$cursos),
               weight = 1,
               label = labels,
+              popup = ~legendas_regiao$popup_info,
               labelOptions = labelOptions(
                 style = list("font-weight" = "normal",
                              padding = "3px 8px"),
@@ -954,9 +951,10 @@ cursos_estado <- data.frame(
    UF = c("AM", "BA", "CE", "DF", "ES", "MA", "MG", "MS", "MT", "PA", "PB", "PE", "PI", "PR", "RJ", "RN", "RS", "SC", "SP", "RO", "RR", "AC", "TO", "SE", "AL", "GO", "AP"),
     cursos = c(1, 2, 4, 22, 2, 2, 1, 9, 3, 2, 6, 4, 1, 4, 3, 2, 11, 6, 7, 0, 0, 0, 0, 0, 0, 0, 0))
 
-#mapa_estado <- mapa_estado %>% st_transform(4326)
 dados_mapa_estados = estados_sf %>% 
     left_join(cursos_estado)
+
+legendas_estados <- dados_mapa_estados %>% mutate(popup_info = paste (UF)) # criando uma coluna na tabela de dados com os dados que serão mostrados na janela popup
 
 bins <- c(0, 4, 8, 12, 14, 16, 20, 24)
 qpal = colorBin("Greens", dados_mapa_estados$cursos, bins = bins)
@@ -966,7 +964,8 @@ labels <- sprintf("<strong>%s</strong>", dados_mapa_estados$cursos) %>% lapply(h
 
 mapa_cursos_estados <- dados_mapa_estados %>% 
     leaflet() %>%
-  
+    setView(lng = -58, lat = -14,
+           zoom = 4) %>%
     addPolygons(stroke = TRUE,
               opacity = 1.0,
               fillOpacity = 1.0,
@@ -975,6 +974,7 @@ mapa_cursos_estados <- dados_mapa_estados %>%
               fillColor = ~qpal(dados_mapa_estados$cursos),
               weight = 1,
               label = labels,
+              popup = ~legendas_estados$popup_info,
               labelOptions = labelOptions(
                 style = list("font-weight" = "normal",
                              padding = "3px 8px"),
@@ -1006,6 +1006,16 @@ Column 2 {data-width=600}
 ```{r Locais dos cursos e origem de alunos e instrutores }
 
 
+# Insere Awesome icons
+
+# icon1 <- awesomeIcons(
+#   icon = 'fa-binoculars',
+#   iconColor = 'brown',
+#   library = 'fa',
+#   markerColor = "white"
+# )
+
+
 mapa_cursos <- cursos %>% mutate(popup_info = paste ("Treinamento:", nome.curso, "<br/>", "Realizado em:", ano, "<br/>", "Local:", local.curso, "<br/>", "Cidade:", municipio, "<br/>","Estado:", UF, "<br/>", "Modalidade:", modalidade, "<br/>", "Duração em dias:", duracao.dias, "<br/>", "Carga Horária:", carga.horaria)) # criando uma coluna na tabela de dados com os dados que serão mostrados na janela popup
 
 mapa_alunos <- cursos.alunos %>% mutate(popup_info = paste ("Aluno:", participantes.y, "<br/>", "Treinamento:", nome.curso, "<br/>", "Ano de participação:", ano.y, "<br/>", "Instituição de origem:", instituicao, "<br/>", "Local de origem:", municipio.y, "<br/>","UF:", UF.y)) # criando uma coluna na tabela de dados com os dados que serão mostrados na janela popup
@@ -1013,47 +1023,51 @@ mapa_alunos <- cursos.alunos %>% mutate(popup_info = paste ("Aluno:", participan
 mapa_instrutores <- cursos.instrut %>% mutate(popup_info = paste ("Instrutores:", instrutores.origem, "<br/>", "Treinamento:", nome.curso, "<br/>", "Ano de realização:", ano.y, "<br/>")) # criando uma coluna na tabela de dados com os dados que serão mostrados na janela popup
 
 
-mapa2 <- leaflet() %>%
-    #Base groups
-    setView(lng = -58, lat = -14,
+mapa <- leaflet() %>%
+  #Base groups
+  setView(lng = -58, lat = -14,
            zoom = 4) %>%
-  addProviderTiles(providers$Esri.WorldImagery, group = "Imágenes de ESRI") %>%
+  #addProviderTiles(providers$Esri.WorldImagery, group = "Imágenes de ESRI") %>%
   addProviderTiles(providers$Stamen.TonerLite, group = "Stamen Toner Lite") %>%
-  addProviderTiles(providers$OpenStreetMap.Mapnik, group = "Open Street Map") %>%
+  #addProviderTiles(providers$OpenStreetMap.Mapnik, group = "Open Street Map") %>%
     # Overlay groups
+    
     # addTiles() %>% 
-    addCircleMarkers(data=mapa_cursos,
+    addCircleMarkers(data = mapa_cursos,
                      lat = ~latitude,
                      lng = ~longitude,
+                     #icon = icon1,
                      radius = ~3,
-                     color = "#00240B",
-                     popup = ~popup_info) %>%
+                     group = "Cursos",
+                     color = "darkgreen",
+                     popup = ~popup_info) %>% # inserindo a janela popup no código
     
     addCircleMarkers(data = mapa_alunos,
                      lat = ~latitude.y,
                      lng = ~longitude.y,
                      radius = ~3,
                      group = "Alunos",
-                     color = "#1F0AFF",
+                     color = "gray",
                      popup = ~popup_info) %>% # inserindo a janela popup no código
-   addCircleMarkers(data = mapa_instrutores,
+   
+    addCircleMarkers(data = mapa_instrutores,
                     lat = ~latitude.y,
                     lng = ~longitude.y,
                     radius = ~3,
                     group="Instrutores",
-                    color = "#EB0000",
+                    color = "brown",
                     popup = ~popup_info) %>%  # inserindo a janela popup no código
    
 # Layers Control
 
     addLayersControl(
-        baseGroups = c("OpenStreetMap",
-                       "Stamen Toner Lite",
-                       "Imágenes de ESRI"), 
+        baseGroups = c(#"OpenStreetMap",
+                       "Stamen Toner Lite)"),
+                       #"Imágenes de ESRI"), 
         overlayGroups = c("Cursos",
                           "Alunos",
                           "Instrutores"),
-        options = layersControlOptions(collapsed = TRUE,
+        options = layersControlOptions(collapsed = FALSE,
                                        autoZIndex = TRUE)) %>%
   addEasyButton(easyButton(
     icon="fa-globe", title="Zoom to Level 4",
@@ -1065,8 +1079,7 @@ mapa2 <- leaflet() %>%
     activeColor = "#3D535D",
     completedColor = "#7D4479")
 
-mapa2 %>% hideGroup("Instrutores")
-   
+mapa %>% hideGroup(c("Alunos", "Instrutores"))
 
 ```
 
@@ -1206,6 +1219,134 @@ lista_cursos
 <!-- formatStyle(columns = c("Status.nacional"), `text-align` = 'center') %>% -->
 <!-- formatStyle(columns = c("Area.de.ocorrencia.predominante"), `text-align` = 'center') %>% -->
 
+Imagens de campo {.storyboard}
+=========================================
+
+### **Curso Básico de Anilhamento de Aves Silvestres - Parte Prática** - Tesrva Biológica de Guaribas - Mamanguape, PB
+
+
+```{r imagens1}
+
+knitr::include_graphics('figs/figura01_rebio_guaribas_2022.JPG') 
+
+
+```
+
+***
+
+**Alunos**
+
+- Maria José dos Santos
+- Paulino Lopes
+- Jorge Matias
+- Paulo Marcos
+- Roberto Justus
+
+**Instrutores**
+
+**22 a 28/03/2022**
+
+### **Curso Básico de Anilhamento de Aves Silvestres - Parte Prática** - Tesrva Biológica de Guaribas - Mamanguape, PB
+
+
+```{r imagens2}
+
+knitr::include_graphics('figs/figura01_rebio_guaribas_2022.JPG') 
+
+
+```
+
+***
+
+**Alunos**
+
+- Maria José dos Santos
+- Paulino Lopes
+- Jorge Matias
+- Paulo Marcos
+- Roberto Justus
+
+**Instrutores**
+
+**22 a 28/03/2022**
+
+
+### **Curso Básico de Anilhamento de Aves Silvestres - Parte Prática** - Tesrva Biológica de Guaribas - Mamanguape, PB
+
+
+```{r imagens3}
+
+knitr::include_graphics('figs/figura01_rebio_guaribas_2022.JPG') 
+
+
+```
+
+***
+
+**Alunos**
+
+- Maria José dos Santos
+- Paulino Lopes
+- Jorge Matias
+- Paulo Marcos
+- Roberto Justus
+
+**Instrutores**
+
+**22 a 28/03/2022**
+
+
+### **Curso Básico de Anilhamento de Aves Silvestres - Parte Prática** - Tesrva Biológica de Guaribas - Mamanguape, PB
+
+
+```{r imagens4}
+
+knitr::include_graphics('figs/figura01_rebio_guaribas_2022.JPG') 
+
+
+```
+
+***
+
+**Alunos**
+
+- Maria José dos Santos
+- Paulino Lopes
+- Jorge Matias
+- Paulo Marcos
+- Roberto Justus
+
+**Instrutores**
+
+**22 a 28/03/2022**
+
+
+### **Curso Básico de Anilhamento de Aves Silvestres - Parte Prática** - Tesrva Biológica de Guaribas - Mamanguape, PB
+
+
+```{r imagens5}
+
+knitr::include_graphics('figs/figura01_rebio_guaribas_2022.JPG') 
+
+
+```
+
+***
+
+
+
+**Alunos**
+
+- Maria José dos Santos
+- Paulino Lopes
+- Jorge Matias
+- Paulo Marcos
+- Roberto Justus
+
+**Instrutores**
+
+**22 a 28/03/2022**
+
 
 
 Sobre {data-orientation=columns}
@@ -1215,7 +1356,7 @@ Sobre {data-orientation=columns}
 Column-1 {data-width=500}
 ------------------------------------------------------------------
 
-### **Relatório**
+### **Relatório** - Última atualização: **05/04/2023**
 
 
 #### **Os cursos ministrados pelo CEMAVE**
@@ -1234,8 +1375,6 @@ Interessado em participar de um curso oferecido pelo CEMAVE?
 Visite regularmente [nosso site](https://www.icmbio.gov.br/cemave) e siga nosso [instagram](https://www.instagram.com/icmbio.cemave/?hl=pt) para receber informações sobre o lançamento dos editais para nossos treinamentos.  
 
 
-Última atualização em **05/04/2023**
-
 
 Documento gerado em **'`r format(Sys.Date(), "%d %B de %Y")`'**.
 
@@ -1245,5 +1384,37 @@ Column-2 {data-width = 500}
 
 ### **Fale conosco**
 
+####
+
+```{r logo cemave, echo = FALSE, out.width = '15%', fig.align = "center"}
+
+knitr::include_graphics('figs/logo-cemave.jpg')
+
+```
+
+
+
+```{r logo SNA, echo = FALSE, out.width = '15%', fig.align="center"}
+
+knitr::include_graphics('figs/logo-sna.jpg') 
+
+```
+
+<center>
+
+#### **Centro Nacional de Pesquisa e Conservação de Aves Silvestres - CEMAVE**  
+
+*cemave.sede@icmbio.gov.br*
+
+</center>
+
+-------------------------------------------------------------------------------
+
+
+```{r logo ICMBio, echo = FALSE, out.width = '40%', fig.align="center"}
+
+knitr::include_graphics('figs/logo-icmbio.png') 
+
+```
 
 
