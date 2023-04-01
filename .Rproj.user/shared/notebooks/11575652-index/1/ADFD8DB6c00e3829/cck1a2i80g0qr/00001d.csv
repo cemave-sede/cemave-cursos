@@ -1,0 +1,5 @@
+"0","alunos[alunos == """" | cursosCemave == "" ""] <- NA
+"
+"2","Error in `[<-.data.frame`(`*tmp*`, alunos == """" | cursosCemave == "" "",  : 
+  object 'cursosCemave' not found
+"

@@ -1,0 +1,33 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1612439579755.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "D108CF33",
+    "lastKnownWriteTime" : 2314885530818453536,
+    "last_content_update" : 1612439579755,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "D718D31E",
+        "caption" : "cursos",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=cursos&cache_key=D718D31E",
+        "displayedObservations" : "46",
+        "environment" : "",
+        "expression" : "cursos",
+        "object" : "cursos",
+        "preview" : "0",
+        "totalObservations" : "46",
+        "variables" : "26"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 7,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

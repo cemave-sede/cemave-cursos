@@ -1,0 +1,33 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1612463757210.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "72BBDE2D",
+    "lastKnownWriteTime" : 1821113506272,
+    "last_content_update" : 1612463757210,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "1503249C",
+        "caption" : "cursos.alunos",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=cursos.alunos&cache_key=1503249C",
+        "displayedObservations" : "896",
+        "environment" : "",
+        "expression" : "cursos.alunos",
+        "object" : "cursos.alunos",
+        "preview" : "0",
+        "totalObservations" : "896",
+        "variables" : "40"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 11,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

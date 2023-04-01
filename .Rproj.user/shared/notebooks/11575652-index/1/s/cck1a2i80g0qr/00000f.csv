@@ -1,0 +1,11 @@
+"0",""
+"0","cursos <- read.csv(""data/cursos_cemave_2023.csv"", h=T, sep="";"") "
+"0",""
+"0","alunos <- read.csv(""data/alunos.csv"", h=T, sep="";"")"
+"0",""
+"0","instrutores <- read.csv(""data/instrutores.csv"", h=T, sep="";"")"
+"0",""
+"0","cursos.alunos <- full_join(cursos, alunos, by = ""ID"")"
+"2","Error in full_join(cursos, alunos, by = ""ID"") : 
+  could not find function ""full_join""
+"

@@ -1,0 +1,20 @@
+"0","G15 <-  participantes %>%
+        filter(!is.na(UF)) %>% 
+        group_by(UF) %>%
+        summarise(count = n()) %>% 
+
+G15 <- instrutores.alterado2 %>%
+  count(UF,) %>%
+  ggplot(aes(y = reorder(UF, n), 
+             x = n)) +
+  geom_col(fill=""#69b3a2"") +
+  xlab(""Ações de instrutoria"") +
+  ylab("" "") +
+  theme_minimal() +
+  theme(
+    panel.grid.minor.y = element_blank(),
+    panel.grid.major.y = element_blank(),
+    ) 
+"
+"2","Error in count(., UF, ) : object 'instrutores.alterado2' not found
+"

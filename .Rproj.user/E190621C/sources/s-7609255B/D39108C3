@@ -1,0 +1,33 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1612464695501.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "D39108C3",
+    "lastKnownWriteTime" : 2314885530818453536,
+    "last_content_update" : 1612464695501,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "D5EA3572",
+        "caption" : "cursos.instrutores",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=cursos.instrutores&cache_key=D5EA3572",
+        "displayedObservations" : "162",
+        "environment" : "",
+        "expression" : "cursos.instrutores",
+        "object" : "cursos.instrutores",
+        "preview" : "0",
+        "totalObservations" : "162",
+        "variables" : "40"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 12,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

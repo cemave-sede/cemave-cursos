@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1612532041771.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "4EDDB7E4",
+    "lastKnownWriteTime" : 1612530691,
+    "last_content_update" : 1612530691,
+    "path" : "C:/Tutoriais_R/Dash_cursos_cemave/teste.Rmd",
+    "project_path" : "teste.Rmd",
+    "properties" : {
+        "cursorPosition" : "9,104",
+        "scrollLine" : "0"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 8,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

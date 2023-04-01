@@ -1,0 +1,33 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1612457368996.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "895EA44C",
+    "lastKnownWriteTime" : 8751164169839537162,
+    "last_content_update" : 1612457368996,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "EFC349F3",
+        "caption" : "mapa_cursos",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=mapa_cursos&cache_key=EFC349F3",
+        "displayedObservations" : 46,
+        "environment" : "",
+        "expression" : "mapa_cursos",
+        "object" : "mapa_cursos",
+        "preview" : 0,
+        "totalObservations" : 46,
+        "variables" : 27
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 9,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}
