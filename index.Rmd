@@ -324,7 +324,7 @@ G7 <- tempo.decada %>%
     ggplot( aes(x = decada, y = cursos)) +
     geom_col(color = "#e9ecef",  fill="#69b3a2") +
     geom_text(aes(label = cursos)) +
-    ylim(0, 45) +
+    # ylim(0, 45) +
     scale_x_discrete(name = " ") +
     scale_y_continuous(name = " ") +
     theme_minimal() +
@@ -732,10 +732,10 @@ categorias.instrutores <- data.frame(
   numero = c(119, 31, 23, 4, 2, 1)
 )
 
-#coul4 <- brewer.pal(6, "Pastel2") 
+coul4 <- brewer.pal(6, "Pastel2") 
 
-color <- colorRampPalette(c("darkgreen","lightgreen"))
-color(6)
+# color <- colorRampPalette(c("darkgreen","lightgreen"))
+# color(6)
 
 
 G17 <-  instrutores %>%
@@ -744,7 +744,7 @@ G17 <-  instrutores %>%
         summarise(count = n()) %>% 
       
         ggplot(aes(x = fct_reorder(tipos.inst, count, .desc = F), y = count)) +
-        geom_col(color = "#e9ecef",  fill= color(6)) +
+        geom_col(color = "#e9ecef",  fill= coul4) +
         scale_x_discrete(name = " ") +
         scale_y_continuous(name = "Número de instrutores") +
         scale_x_discrete(name = " ", labels = c('Empresas', 'Forças de Segurança', 'Museus & Afins',  'Terceiro Setor',  'Ensino & Pesquisa', 'Órgãos Ambientais')) +
@@ -1084,7 +1084,7 @@ mapa %>% hideGroup(c("Alunos", "Instrutores"))
 ```
 
 
-Lista dos cursos 
+Consultas 
 =========================
 
 Row {data-height = 200}
@@ -1121,16 +1121,22 @@ ggplotly(G50)
 Row {data-height=800 .tabset .tabset-fade}
 -------------------------------------------------------------------
 
-### **Lista de cursos**
+### **Lista dos cursos**
 
 ```{r lista de cursos}
 
+cursos$duracao.dias <- as.integer(cursos$duracao.dias)
 
 tabela_cursos <- subset(cursos, select = -c(ID, periodo, carga.horaria,  organizadores, categoria, latitude, longitude, instrutores.origem, programa.curso, lista.participantes, relatorio.descritivo, fotos, origem.informacoes, observacoes))
 
+tabela_cursos <- tabela_cursos %>%
+        mutate(UF = recode(UF,
+                              "ARG"= " "))
 tab1 <- tabela_cursos %>% 
     select(ano, nome.curso, foco.curso, modalidade, duracao.dias, local.curso, municipio, UF, participantes, alunos, instrutores, colaboradores) %>% 
-    arrange(desc(ano))
+    arrange(desc(ano)) 
+
+
 
 lista_cursos <- datatable(tab1,
           caption = 'Tabela 1. Lista de cursos ministrados pelo CEMAVE de 1978 a 2022.',
@@ -1168,41 +1174,239 @@ lista_cursos
 ```{r lista de participantes, echo = FALSE}
 
 
-# tabela_participantes <- subset(participantes, select = -c(categ, genero, tipo.inst, latitude, longitude))
-# 
-# tab_participantes <- tabela_participantes %>% 
-#     #filter(is.na()) %>%
-#     arrange(desc(ano), desc(ID), curso, UF, participantes) %>% 
-#     select(- ID)
-# 
-# 
-#     
-# 
-# 
-# 
-#     
-# lista_cursos <- datatable(tab_participantes,
-#           caption = 'Tabela 2. Lista de participantes nos cursos ministrados pelo CEMAVE de 1978 a 2022.',
-#           
-#           colnames = c('Ano', 'curso', 'Participante', 'Condição', 'Instituição', 'Tipo de Instituição', 'Município', 'UF', 'Região', 'País'),
-#           
-#           extensions = 'Buttons',
-#                            elementId = NULL,
-#                            # extensions= "Scroller",
-#                            style="bootstrap",
-#                            class="stripe hover",
-#                            width="80%",
-#                            rownames = F,
-#                            autoHideNavigation = T,
-#                            escape =FALSE,
-#                            filter = "top",
-#                            options=list(deferRender=TRUE,
-#                                    pageLength = 15,
-#                                    scrollY=300,
-#                                    dom = 'Bfrtip', 
-#                          buttons = c('copy', 'csv', 'excel', 'pdf')))
-# 
-# lista_cursos  
+participantes$ID = as.character(participantes$ID)
+
+tabela_participantes <- subset(participantes, select = -c(categ, genero, tipo.inst, latitude, longitude))
+
+
+tab_participantes <- tabela_participantes %>%
+        mutate(tipos.inst = recode(tipos.inst,
+                              "empresas"="empresa"))
+                              
+tab_participantes <- tabela_participantes %>%
+        mutate(curso = recode(ID,
+"001"="XIII Curso A Ornitologia na Conservação das Aves Silvestres",
+"002"="Técnicas de Pesquisa e Conservação em Aves Silvestres",
+"003"="A Ornitologia na Conservação de Aves Silvestres",
+"004"="A Ornitologia e a Conservação de Aves Silvestres",
+"005"="Introdução ao Anilhamento de Aves Silvestres",
+"006"="Aves como Bioindicadores para Monitoramento de UCs",
+"007"="Curso Básico de Anilhamento de Aves Silvestres",
+"008"="I Curso Paranaense de Anilhamento de Aves",
+"009"="Anilhamento de Aves - Noções Básicas e Aplicações",
+"010"="Tópicos de Ornitologia e Conservação de Aves Silvestres",
+"011"="I Curso Nordestino de Anilhamento de Aves Silvestres",
+"012"="Noções sobre o Uso de Aves como Indicadores Biológicos das Condições Ambientais",
+"013"="XII Curso de Anilhamento de Aves: Uso do Anilhamento na Conservação de Aves Silvestres",
+"014"="I Curso de Anilhamento de Aves Silvestres do Arquipélago de Fernando de Noronha",
+"015"="IV Curso de Observação e Anilhamento de Aves",
+"016"="Curso de Observação e Identificação de Aves",
+"017"="I Curso de Anilhamento e Observação de Aves Silvestres Brasileiras",
+"018"="I Seminário de Monitoramento de Aves Silvestres em Unidades de Conservação de Santa Catarina",
+"019"="II Curso de Observação e Anilhamento de Aves",
+"020"="VIII Curso de Anilhamento de Aves Silvestres",
+"021"="XI Curso de Anilhamento de Aves",
+"022"="O Uso do Anilhamento na Conservação das Aves Silvestres",
+"023"="A Ornitologia na Conservação das Aves Silvestres",
+"024"="A Ornitologia na Conservação das Aves Silvestres",
+"025"="Técnicas de Pesquisa e Conservação de Aves Silvestres",
+"026"="Curso Básico de Anilhamento de Aves Silvestres",
+"027"="Curso Nacional de Anilhamento de Aves Silvestres",
+"028"="I Curso de Anilhamento de Aves Marinhas para Equipes de Projetos de Monitoramento de Praias (PMPs)",
+"029"="Técnicas de Pesquisas com Aves Silvestres",
+"030"="Curso de Anilhamento de Aves Silvestres",
+"031"="Curso de Anilhamento de Aves Silvestres",
+"032"="Curso de Anilhamento de Aves Silvestres",
+"033"="Curso de Anilhamento de Aves Silvestres",
+"034"="Curso de Anilhamento de Aves Silvestres",
+"035"="Noções Básicas para Identificação de Aves Silvestres",
+"036"="Curso Básico de Anilhamento de Aves Silvestres",
+"037"="Curso em Identificação, Manejo e Destinação das Espécies  Alvo do PAN Papagaios",
+"038"="Curso em Identificação, Manejo e Destinação das Espécies  Alvo do PAN Papagaios",
+"039"="Curso em Identificação, Manejo e Destinação das Espécies  Alvo do PAN Papagaios",
+"040"="Curso em Identificação, Manejo e Destinação das Espécies  Alvo do PAN Papagaios",
+"041"="Curso em Identificação, Manejo e Destinação das Espécies  Alvo do PAN Papagaios",
+"042"="Curso em Identificação, Manejo e Destinação das Espécies  Alvo do PAN Papagaios",
+"044"="I Workshop de Capacitação de Agentes do Ibama para Fiscalização da IN nº 07/2014",
+"045"="Ecologia e Conservação de Aves",
+"046"="Reconhecimento e Manejo de Aves Silvestres",
+"047"="Técnicas de Pesquisa e Conservação de Aves Silvestres",
+"048"="XIV Curso 'A Ornitologia na Conservação de Aves Silvestres'",
+"049"="A Ornitologia e a Conservação das Aves Silvestres",
+"050"="Técnicas de Pesquisa e Conservação de Aves Silvestres",
+"051"="Treinamento em Técnicas de Monitoramento de Aves Silvestres",
+"052"="A Ornitologia na Conservação das Aves Silvestres",
+"054"="X Curso de Anilhamento de Aves",
+"055"="IX Curso de Anilhamento de Aves",
+"056"="A Ornitologia na Conservação das Aves Silvestres",
+"057"="",
+"058"="",
+"059"="",
+"060"="Treinamento para o Instituto Estadual de Florestas - IEF/SP",
+"061"="I Curso de Extensão em Biologia das Aves Silvestres",
+"062"="Mini-curso de Anilhamento",
+"063"="Treinamento para a Companhia Energética de São Paulo - CESP",
+"064"="Curso de Anilhamento de Aves Migratórias Continentais",
+"065"="",
+"066"="",
+"067"="Treinamento de Pessoal para a Associação Vila-Velhense de Proteção Ambiental",
+"068"="Treinamento para Dirección de Ecologia - Ministério de Agricultura, Ganaderia, Industria y Comércio",
+"069"="Treinamento para o CENAQUA",
+"070"="Curso de Anilhamento - Aracruz Florestal",
+"071"="Noções de Anilhamento de Aves Silvestres e Usos em Conservação da Natureza - I",
+"072"="Noções de Anilhamento de Aves Silvestres e Usos em Conservação da Natureza - II",
+"073"="Noções de Anilhamento de Aves Silvestres e Usos em Conservação da Natureza - III",
+"074"="I Treinamento para Censos de Aves Aquáticas no Brasil",
+"075"="Técnicas de Captura, Identificação e Anilhamento de Aves Migratórias",
+"076"="Mini-curso Conservação e Manejo de Aves Silvestres",
+"077"="Treinamento de Biólogos",
+"078"="Mini-curso Anilhamento de Aves Silvestres",
+"079"="Treinamento para o Centro de Vida Silvestre/UNESP e Centro de Desenvolvimento Agropecuário do Médio Vale do Paranapanema",
+"080"="Mini-curso A Ornitologia na Conservação de Aves Silvestres",
+"081"="Treinamento de três biólogos",
+"082"="Curso de Anilhamento e Censo de Zenaida auriculata em São Pedro do Ivaí",
+"083"="Treinamento de Biólogos",
+"084"="Treinamento de Biólogos",
+"085"="",
+"086"="Conservação das Aves Silvestre - Noções Básicas",
+"087"="A Ornitologia na Conservação das Aves Silvestres",
+"088"="",
+"089"="",
+"090"="Identificação e Conservação de Aves Silvestres - Noções Básicas",
+"091"="Mini-curso de Educação Ambiental - Noções Básicas de Conservação através do Estudo de Aves",
+"092"="Mini-curso - Ornitologia e Conservação de Aves Marinhas",
+"093"="Curso Regional de Introdução ao Anilhamento",
+"094"="Curso para a Conservação e Monitoramento de Aves Marinhas",
+"095"="Curso Básico de Anilhamento de Aves Silvestres - Parte Teórica",
+"096"="Curso Básico de Anilhamento de Aves Silvestres - Parte Prática",
+"097"="Curso Básico de Anilhamento de Aves Silvestres - Parte Prática")) %>% 
+
+        mutate(local = recode(ID,
+"001"="Base de Estudos do Pantanal - Passo do Lontra ",
+"002"="Estação Ecológica do Taim",
+"003"="Parque Nacional de Brasília",
+"004"="Base de Estudos do Pantanal - Passo do Lontra ",
+"005"="Estação Ecológica Serra das Araras",
+"006"=" Floresta Nacional de Ipanema - ACADEBIO",
+"007"="Reserva Biológica de Guaribas",
+"008"="Refúgio Biológico de Bela Vista",
+"009"="Londrina",
+"010"="Parque Nacional do Itatiaia",
+"011"="Natal",
+"012"="Baía de São Marcos - Ilha do Cajual",
+"013"="Base de Estudos do Pantanal - Passo do Lontra ",
+"014"="Parque Nacional Marinho de Fernando de Noronha",
+"015"="Estação Ecológica do Taim",
+"016"="Fazenda Campo Grande",
+"017"="Parque Nacional de Brasília",
+"018"="Estação Ecológica de Carijós",
+"019"="",
+"020"="Parque Nacional da Lagoa do Peixe",
+"021"="Estação Ecológica do Tapacura e Base de Pesquisa em Aves Migratórias da Coroa do Avião",
+"022"="Floresta Nacional do Araripe e Estação Ecológica de Aiuaba",
+"023"="Parque Nacional de Brasília",
+"024"="Estação Ecológica de Aiuaba e Floresta Nacional do Araripe-Apodi",
+"025"="Base de Estudos do Pantanal - Passo do Lontra ",
+"026"="Floresta Nacional Araripe-Apodi",
+"027"="Parque Nacional do Pantanal Matogrossense",
+"028"="Hotel Costa do Atlântico",
+"029"="Parque Nacional de Brasília",
+"030"="Parque Nacional de Brasília",
+"031"="Parque Nacional de Brasília",
+"032"="Parque Nacional de Brasília",
+"033"="Parque Nacional de Brasília",
+"034"="Parque Nacional de Brasília",
+"035"="Parque Nacional de Brasília",
+"036"="Parque Nacional de Brasília",
+"037"="Parque Zoobotânico de Salvador",
+"038"="Sede do Batalhão da Polícia Ambiental Força Verde - PMPR",
+"039"="Jardim Zoológico do Rio de Janeiro - RioZoo",
+"040"="Sede do Comando do Policiamento Militar Ambiental - CPMA",
+"041"="Fundação Parque Zoológico de São Paulo",
+"042"="Instituto de Meio Ambiente do Mato Grosso do Sul - IMASUL",
+"044"="Base Multifuncional do CEMAVE em Florianópolis, SC - ESEC Carijós",
+"045"="",
+"046"="Jardim Botânico Benjamim Maranhão",
+"047"="Armação de Itapocoroy",
+"048"="Base de Estudos do Pantanal - Passo do Lontra ",
+"049"="Superintendência Estadual do Ibama",
+"050"="Base de Estudos do Pantanal - Passo do Lontra ",
+"051"="Usina Nova América",
+"052"="Fazenda Branda",
+"053"="Parque Metropolitano de Pituaçu",
+"054"="Estação Ecológica do Taim",
+"055"="Praia da Coroa do Avião",
+"056"="Parque Estadual do Caracol",
+"058"="Estação Ecológica do Taim",
+"059"="Parque Nacional do Itatiaia",
+"060"="Ilha do Cardoso",
+"061"="Estação Ecológica do Tapacurá- EET-UFRPE",
+"062"="Universidade Federal do Piauí",
+"063"="UHE Porto Primavera",
+"064"="",
+"066"="Parque Nacional da Lagoa do Peixe",
+"067"="",
+"068"="",
+"069"="Porto Trombetas",
+"070"="Aracruz Florestal",
+"071"="Parque Nacional de Brasília",
+"072"="Parque Nacional de Brasília",
+"073"="Parque Nacional de Brasília",
+"074"="Estação Ecológica do Taim",
+"075"="Baía de São Marcos - Ilha do Cajual",
+"076"="",
+"077"="",
+"078"="Universidade Federal de Pelotas",
+"079"="Centro de Vida Silvestre/UNESP e Centro de Desenvolvimento Agropecuário do Médio Vale do Paranapanema",
+"080"="Parque Nacional de Brasília",
+"081"="Parque Nacional de Brasília",
+"082"="",
+"083"="Parque Nacional de Brasília",
+"084"="Parque Nacional de Brasília",
+"085"="Parque Nacional de Brasília",
+"086"="Jardim Botânico de João Pessoa, PB",
+"087"="Campus Avançado da Universidade do Vale de Itajaí - UNIVALI",
+"088"="Base de Estudos do Pantanal - Passo do Lontra ",
+"089"="Base de Estudos do Pantanal - Passo do Lontra ",
+"090"="Parque Nacional de Brasília",
+"091"="",
+"092"="Campus Avançado da Universidade do Vale de Itajaí - UNIVALI",
+"093"="Reserva Biológica de Guaribas",
+"094"="Universidade Católica de Santos - UNISANTOS",
+"095"="",
+"096"="Campus da Universidade Federal Rural da Amazônia - UFRA",
+"097"="Reserva Biológica de Guaribas"))
+
+
+tab_participantes2 <- tab_participantes %>%
+    #filter(is.na()) %>%
+    arrange(desc(ano), desc(ID), curso, UF, participantes) %>%
+    select(- ID) %>% 
+    select(ano, participantes, curso, categoria, instituicao, tipos.inst, local, municipio, UF, regiao, pais)
+
+lista_cursos <- datatable(tab_participantes2,
+          caption = 'Tabela 2. Lista de participantes nos cursos ministrados pelo CEMAVE de 1978 a 2022.',
+
+          colnames = c('Ano', 'Curso', 'Participante', 'Condição', 'Instituição', 'Tipo de Instituição', 'Local', 'Município', 'UF', 'Região', 'País'),
+
+          extensions = 'Buttons',
+                           elementId = NULL,
+                           #extensions= "Scroller",
+                           style="bootstrap",
+                           class="stripe hover",
+                           width="80%",
+                           rownames = F,
+                           autoHideNavigation = T,
+                           escape =FALSE,
+                           filter = "top",
+                           options=list(deferRender=TRUE,
+                                   pageLength = 15,
+                                   scrollY=300,
+                                   scroller = TRUE,
+                                   dom = 'Bfrtip',
+                         buttons = c('copy', 'csv', 'excel', 'pdf')))
+
+lista_cursos
     
     # formattable(ameacadas, 
 #             align =c("l","l","c"), list(`Especie` = formatter("span", style = ~ style(color = "grey",font.style = "italic"))))
@@ -1219,134 +1423,284 @@ lista_cursos
 <!-- formatStyle(columns = c("Status.nacional"), `text-align` = 'center') %>% -->
 <!-- formatStyle(columns = c("Area.de.ocorrencia.predominante"), `text-align` = 'center') %>% -->
 
-Imagens de campo {.storyboard}
+Imagens {.storyboard}
 =========================================
 
-### **Curso Básico de Anilhamento de Aves Silvestres - Parte Prática** - Tesrva Biológica de Guaribas - Mamanguape, PB
+### **Curso Básico de Anilhamento de Aves Silvestres - Parte Prática** - 2022
 
 
 ```{r imagens1}
 
-knitr::include_graphics('figs/figura01_rebio_guaribas_2022.JPG') 
+knitr::include_graphics('figs/imagem-01_curso_belem_2022.png') 
 
 
 ```
 
 ***
 
+Campus da Universidade Federal Rural da Amazônia - UFRA  
+
+
+Belém, PA  
+
+**21 a 25/11/2022**  
+
+
+
 **Alunos**
 
-- Maria José dos Santos
-- Paulino Lopes
-- Jorge Matias
-- Paulo Marcos
-- Roberto Justus
+- Ana Sílvia Sardinha Ribeiro
+- Antônio Basílio Guerreiro Júnior
+- Beatriz Tavares Pinheiro
+- Dênis Domingues
+- Dimas Augusto Molina Marín
+- Éric Barbosa Gonzaga
+- Érikson Bruno Loseiro Ferreira
+- Karolina Araújo Viana
+- Kauê Felippe de Moraes
+- Matheus Félix Martins Paiva
+- Rubens Ramos Dias
+- Tauãn dos Santos Matos
+- Willian Ricardo da Silva Fernandes
+- Danielson Aleixo
+- Arianne Silva Carreira
+- Francisco Amilton dos Santos
+- Liliane Leal das Chagas
+- Patrícia Dittmar Americano da Costa
+
 
 **Instrutores**
 
-**22 a 28/03/2022**
+- Aílton Carneiro de Oliveira
+- Érika Machado Costa Lima
+- Maximiliano Niedfeld Rodriguez
+- Marcos Pérsio Dantas Santos
 
-### **Curso Básico de Anilhamento de Aves Silvestres - Parte Prática** - Tesrva Biológica de Guaribas - Mamanguape, PB
+
+### **Curso Básico de Anilhamento de Aves Silvestres - Parte Prática** - 2022
 
 
 ```{r imagens2}
 
-knitr::include_graphics('figs/figura01_rebio_guaribas_2022.JPG') 
+knitr::include_graphics('figs/imagem-02_curso_guaribas_2022.png') 
 
 
 ```
 
 ***
 
+Reserva Biológica de Guaribas  
+
+
+Mamanguape, PB  
+
+**07 a 11/11/2022**  
+
+
+
 **Alunos**
 
-- Maria José dos Santos
-- Paulino Lopes
-- Jorge Matias
-- Paulo Marcos
-- Roberto Justus
+- Caroline Vieira Cooke
+- Dayse Alves Jora
+- Havany Fonseca Fontana Neta
+- Mariane Rodrigues Guedes
+- Felipe Braga Pereira
+- Larissa Nayara de Sousa Amaral
+- Paulo Cunha Ferreira Bringel
+- Gabriele Andreia da Silva
+- Victória Carolina Costa Faria
+- Leonardo Victor Soares Pinheiro
+- Otávio da Cruz Almeida Rocha
+- Arlindo Gomes Filho
+- Aucimir Oliveira de Melo
+- Camila Garcia Gomes
+- Sáskia Milbratz
+- Francisco Virginio de Souza
+- Flávia Vieira de Oliveira Aguiar
+- Aline Ramos Souza
+
 
 **Instrutores**
 
-**22 a 28/03/2022**
+- Affonso Henrique Nascimento de Souza
+- Cristiano Marcelo da Silva Nascimento
+- Elivan Arantes de Souza 
+- Roberto Cavalcanti Barbosa Filho
 
 
-### **Curso Básico de Anilhamento de Aves Silvestres - Parte Prática** - Tesrva Biológica de Guaribas - Mamanguape, PB
+
+### **Reconhecimento e Manejo de Aves Silvestres** - 2015
 
 
 ```{r imagens3}
 
-knitr::include_graphics('figs/figura01_rebio_guaribas_2022.JPG') 
+knitr::include_graphics('figs/imagem-03_curso_identificacao_reconhecimento_2015.png') 
 
 
 ```
 
 ***
 
+Jardim Botânico Benjamin Maranhão  
+
+
+João Pessoa, PB  
+
+**26/11/2015**  
+
+
+
 **Alunos**
 
-- Maria José dos Santos
-- Paulino Lopes
-- Jorge Matias
-- Paulo Marcos
-- Roberto Justus
+- Sem informação
 
 **Instrutores**
 
-**22 a 28/03/2022**
+- Priscilla Prudente do Amaral
+- Diego Mendes Lima
 
 
-### **Curso Básico de Anilhamento de Aves Silvestres - Parte Prática** - Tesrva Biológica de Guaribas - Mamanguape, PB
+### **Curso Nacional de Anilhamento de Aves Silvestres** - 2013
 
 
 ```{r imagens4}
 
-knitr::include_graphics('figs/figura01_rebio_guaribas_2022.JPG') 
+knitr::include_graphics('figs/imagem-04_curso_parna_pantanal_2013.png') 
 
 
 ```
 
 ***
 
+Parque Nacional do Pantanal Matogrossense  
+
+
+Poconé, MT  
+
+**10 a 14/06/2013**  
+
+
+
 **Alunos**
 
-- Maria José dos Santos
-- Paulino Lopes
-- Jorge Matias
-- Paulo Marcos
-- Roberto Justus
+- Alberto Felipe Klotz
+- Algislayne  Fechtner Coenga
+- Andreia Quandt Monteiro                                                                                                                                                        
+- Camila Martins Pires
+- Fabricio Basilio Almeida
+- Fabrícia Campello
+- Fernanda Mussi Fontoura
+- Jerry
+- Luiz Carlos Souza Pereira
+- Marcello Vicente Lourenço
+- Marcos Hiroshi Taniwaki
+- Marcus Vinicius Falcão Paredes
+- Paulo Jardel Braz Faiad
+- Paulo Rodrigo Silvestro                                                                                                                                                          
+-  Rafael Amaral                                                                                                                                               
+-  Roberta Marcatti de Azevedo
+
 
 **Instrutores**
 
-**22 a 28/03/2022**
+- Aílton Carneiro de Oliveira
+- Antonio Emanuel Barreto Alves de Sousa
+- Dalci Mauricio Miranda de Oliveira
 
 
-### **Curso Básico de Anilhamento de Aves Silvestres - Parte Prática** - Tesrva Biológica de Guaribas - Mamanguape, PB
+### **Curso Básico de Anilhamento de Aves Silvestres** - 2012
 
 
 ```{r imagens5}
 
-knitr::include_graphics('figs/figura01_rebio_guaribas_2022.JPG') 
+knitr::include_graphics('figs/imagem-05_curso_PARNA_BSB_2012_Infraero.png') 
 
 
 ```
 
 ***
 
+Parque Nacional de Brasília  
 
 
-**Alunos**
+Brasília, DF
 
-- Maria José dos Santos
-- Paulino Lopes
-- Jorge Matias
-- Paulo Marcos
-- Roberto Justus
+Curso para INFRAERO
+
+**05 a 09/11/2012**  
+
+**Alunos**  
+
+- Adriana Vaz dos Santos
+- Aline Silva dos Anjos
+- Ana Aparecida de Freitas Lima
+- Ana Paula Fagundes
+- Angela Sanches Domingues
+- Camila de Mesquita Lopes
+- Gabriel F. Fernandes
+- Leila Ramos Neves
+- Leonardo Martha de Souza Lima
+- Lorena e Silva Monte de Almeida
+- Luciéle Cristina Rosa
+- Maiara Lenise Lutz
+- Matheus Sanches
+- Michelle da Cunha Torres
+- Paulo Vinicius Davanço
+- Pedro Santos
+- Rochele VaSuloncelos Castelo Branco Mourão
+- Rossana de Paula Vilamiu
+- Thaíse Leandro Barbosa
+- Tiago Porto Aranha
+
 
 **Instrutores**
 
-**22 a 28/03/2022**
+- Aílton Carneiro de Oliveira
+- Antonio Emanuel Barreto Alves de Sousa
+- Roberta
 
+
+
+### **O Uso do Anilhamento na Conservação das Aves Silvestres** - 1994
+
+
+```{r imagens6}
+
+knitr::include_graphics('figs/imagem-06_curso_araripe_aiuaba_96.jpg') 
+
+
+```
+
+***
+
+Floresta Nacional do Araripe-Apodi e Estação Ecológica de Aiuaba  
+
+
+Crato, CE
+
+
+**25/05 a 06/06/1994**  
+
+**Alunos**  
+
+- Antônio Sabino da Silva
+- Carlos Albécio Maia
+- Carlos Leal Filho
+- Francisco Daxo Leal Alencar
+- Gilmário Agostinho dos Santos
+- Irisney Antunes Marques
+- Márcia Maria Moraes Gonçalves
+- Tânia Pereira Santana
+- Gláucia Jordão Zerbini
+- Elivan Arantes de Souza
+- Flávio Roberto de Alencar Roza
+
+
+**Instrutores**
+
+- João Luiz Xavier do Nascimento
+- Severino Mendes de Azevedo Junior
+ 
 
 
 Sobre {data-orientation=columns}
