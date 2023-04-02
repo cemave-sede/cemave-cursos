@@ -5,7 +5,9 @@ output:
     orientation: rows
     vertical_layout: fill
     storyboard: TRUE
-    theme: cerulean
+    theme: flatly
+      # version: 4
+      # bootswatch: minty
     social: ["menu"]
     navbar:
         - { icon: "fa-instagram", href: "https://www.instagram.com/icmbio.cemave/?hl=pt", align: right }
@@ -170,7 +172,7 @@ Column {data-width = 200}
 ```{r}
 
 
-valueBox(dim(cursos)[1], icon = "fas fa-book-open", color = "#458B41")
+valueBox(dim(cursos)[1], icon = "fa-binoculars", color = "#458B41")
 ```
 
 ### Dias de treinamento
@@ -201,7 +203,9 @@ valueBox(total_participantes, icon = "fa-users", color = "#69b3a2")
 
 ```{r}
 
-valueBox(total_alunos, icon = "fa-user-graduate", color = "#69b3a2")
+valueBox(total_alunos, icon = "fa-graduation-cap", color = "#69b3a2")
+#"fa-duotone fa-screen-users"
+
 ```
 
 
@@ -1378,6 +1382,37 @@ tab_participantes <- tabela_participantes %>%
 "097"="Reserva Biológica de Guaribas"))
 
 
+# tab_participantes2 <- tab_participantes %>%
+#     #filter(is.na()) %>%
+#     arrange(desc(ano), desc(ID), curso, UF, participantes) %>%
+#     select(- ID) %>% 
+#     select(ano, participantes, curso, categoria, instituicao, tipos.inst, local, municipio, UF, regiao, pais)
+# 
+# lista_cursos <- datatable(tab_participantes2,
+#           caption = 'Tabela 2. Lista de participantes nos cursos ministrados pelo CEMAVE de 1978 a 2022.',
+# 
+#           colnames = c('Ano', 'Curso', 'Participante', 'Condição', 'Instituição', 'Tipo de Instituição', 'Local', 'Município', 'UF', 'Região', 'País'),
+# 
+#           extensions = 'Buttons',
+#                            elementId = NULL,
+#                            #extensions= "Scroller",
+#                            style="bootstrap",
+#                            class="stripe hover",
+#                            width="80%",
+#                            rownames = F,
+#                            autoHideNavigation = T,
+#                            escape =FALSE,
+#                            filter = "top",
+#                            options=list(deferRender=TRUE,
+#                                    pageLength = 15,
+#                                    scrollY=300,
+#                                    scroller = TRUE,
+#                                    dom = 'Bfrtip',
+#                          buttons = c('copy', 'csv', 'excel', 'pdf')))
+# 
+# lista_cursos
+
+
 tab_participantes2 <- tab_participantes %>%
     #filter(is.na()) %>%
     arrange(desc(ano), desc(ID), curso, UF, participantes) %>%
@@ -1401,12 +1436,14 @@ lista_cursos <- datatable(tab_participantes2,
                            filter = "top",
                            options=list(deferRender=TRUE,
                                    pageLength = 15,
+                                   autowidth=T,
                                    scrollY=300,
                                    scroller = TRUE,
                                    dom = 'Bfrtip',
                          buttons = c('copy', 'csv', 'excel', 'pdf')))
 
 lista_cursos
+
     
     # formattable(ameacadas, 
 #             align =c("l","l","c"), list(`Especie` = formatter("span", style = ~ style(color = "grey",font.style = "italic"))))
@@ -1710,7 +1747,7 @@ Sobre {data-orientation=columns}
 Column-1 {data-width=500}
 ------------------------------------------------------------------
 
-### **Relatório** - Última atualização: **05/04/2023**
+### Última atualização deste **Relatório**: **05/04/2023**
 
 
 #### **Os cursos ministrados pelo CEMAVE**
