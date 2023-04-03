@@ -172,7 +172,7 @@ Column {data-width = 200}
 ```{r}
 
 
-valueBox(dim(cursos)[1], icon = "fa-binoculars", color = "#458B41")
+valueBox(dim(cursos)[1], icon = "fa-binoculars", color = "#00AEAD")
 ```
 
 ### Dias de treinamento
@@ -234,7 +234,7 @@ Row {data-height = 380}
 
 # --------------------  Cursos por tema
 
-mycolors <- c("#dbead5", "#A2D8A2", "#677E67","#458B41", "#00AEAD")
+mycolors <- c("#69b3a2", "#A2D8A2", "#677E67","#458B41", "#dbead5") 
 
 G1 <- cursos %>%
         #filter(!is.na(foco.curso)) %>% 
@@ -327,8 +327,6 @@ tempo.decada <- data.frame(
 G7 <- tempo.decada %>%
     ggplot( aes(x = decada, y = cursos)) +
     geom_col(color = "#e9ecef",  fill="#69b3a2") +
-    geom_text(aes(label = cursos)) +
-    # ylim(0, 45) +
     scale_x_discrete(name = " ") +
     scale_y_continuous(name = " ") +
     theme_minimal() +
@@ -519,7 +517,7 @@ G11 <- alunos %>%
         geom_col(color = "#e9ecef",  fill= coul1) +
         ylim(0, 300) +
         scale_y_continuous(name = " ") +
-        scale_x_discrete(name = " ", labels = c('Órgãos Ambientais', 'Forças de Segurança', 'Ensino & Pesquisa', 'Terceiro Setor', 'Museus & Afins', 'Empresas', 'Consultoria', 'Setor Jurídico')) +
+        scale_x_discrete(name = " ", labels = c('Setor Jurídico', 'Consultoria', 'Empresas', 'Museus & Afins', 'Terceiro Setor', 'Ensino & Pesquisa', 'Forças de Segurança', 'Órgãos Ambientais')) +
         coord_flip() +
         theme_minimal() +
         theme(
@@ -1161,11 +1159,11 @@ lista_cursos <- datatable(tab1,
                                    pageLength = 15,
                                    scrollY=300,
                                    dom = 'Bfrtip', 
-                         buttons = c('copy', 'csv', 'excel', 'pdf')))
-
-#formattable(tab1, 
-            #align =c("c","l", "l", "l", "c", "l", "l", "l", "c", "c", "c", "c"))
-            #list(`Especie` = formatter("span", style = ~ style(color = "grey",font.style = "italic"))))
+                         #buttons = c('copy', 'csv', 'excel', 'pdf')))
+                         buttons = list('copy', 'print', list(
+        extend = 'collection',
+        buttons = c('csv', 'excel', 'pdf'),
+        text = 'Download'))))
 
 lista_cursos  
     
@@ -1185,9 +1183,17 @@ tabela_participantes <- subset(participantes, select = -c(categ, genero, tipo.in
 
 tab_participantes <- tabela_participantes %>%
         mutate(tipos.inst = recode(tipos.inst,
-                              "empresas"="empresa"))
-                              
-tab_participantes <- tabela_participantes %>%
+                              "empresas" = "Empresa",
+                              "orgao-ambiental" = "Órgão Ambiental",
+                              "terceiro-setor" = "Terceiro Setor",
+                              "ensino-pesquisa" = "Ensino & Pesquisa",
+                              "museus-afins" = "Museus & afins",
+                              "consultoria" = "Consultoria",
+                              "setor-juridico" = "Setor Jurídico",
+                              "forças-seguranca" = "Forças de Segurança"
+                              )) %>% 
+
+
         mutate(curso = recode(ID,
 "001"="XIII Curso A Ornitologia na Conservação das Aves Silvestres",
 "002"="Técnicas de Pesquisa e Conservação em Aves Silvestres",
@@ -1379,50 +1385,19 @@ tab_participantes <- tabela_participantes %>%
 "094"="Universidade Católica de Santos - UNISANTOS",
 "095"="",
 "096"="Campus da Universidade Federal Rural da Amazônia - UFRA",
-"097"="Reserva Biológica de Guaribas"))
+"097"="Reserva Biológica de Guaribas")) %>% 
 
 
-# tab_participantes2 <- tab_participantes %>%
-#     #filter(is.na()) %>%
-#     arrange(desc(ano), desc(ID), curso, UF, participantes) %>%
-#     select(- ID) %>% 
-#     select(ano, participantes, curso, categoria, instituicao, tipos.inst, local, municipio, UF, regiao, pais)
-# 
-# lista_cursos <- datatable(tab_participantes2,
-#           caption = 'Tabela 2. Lista de participantes nos cursos ministrados pelo CEMAVE de 1978 a 2022.',
-# 
-#           colnames = c('Ano', 'Curso', 'Participante', 'Condição', 'Instituição', 'Tipo de Instituição', 'Local', 'Município', 'UF', 'Região', 'País'),
-# 
-#           extensions = 'Buttons',
-#                            elementId = NULL,
-#                            #extensions= "Scroller",
-#                            style="bootstrap",
-#                            class="stripe hover",
-#                            width="80%",
-#                            rownames = F,
-#                            autoHideNavigation = T,
-#                            escape =FALSE,
-#                            filter = "top",
-#                            options=list(deferRender=TRUE,
-#                                    pageLength = 15,
-#                                    scrollY=300,
-#                                    scroller = TRUE,
-#                                    dom = 'Bfrtip',
-#                          buttons = c('copy', 'csv', 'excel', 'pdf')))
-# 
-# lista_cursos
-
-
-tab_participantes2 <- tab_participantes %>%
+#tab_participantes2 <- tab_participantes %>%
     #filter(is.na()) %>%
     arrange(desc(ano), desc(ID), curso, UF, participantes) %>%
     select(- ID) %>% 
-    select(ano, participantes, curso, categoria, instituicao, tipos.inst, local, municipio, UF, regiao, pais)
+    select(ano, participantes, curso, local, categoria, instituicao, tipos.inst,  municipio, UF, regiao, pais)
 
-lista_cursos <- datatable(tab_participantes2,
+lista_cursos <- datatable(tab_participantes,
           caption = 'Tabela 2. Lista de participantes nos cursos ministrados pelo CEMAVE de 1978 a 2022.',
 
-          colnames = c('Ano', 'Curso', 'Participante', 'Condição', 'Instituição', 'Tipo de Instituição', 'Local', 'Município', 'UF', 'Região', 'País'),
+          colnames = c('Ano', 'Participante', 'Curso', 'Local',  'Condição', 'Instituição', 'Tipo de Instituição', 'Município', 'UF', 'Região', 'País'),
 
           extensions = 'Buttons',
                            elementId = NULL,
@@ -1440,14 +1415,15 @@ lista_cursos <- datatable(tab_participantes2,
                                    scrollY=300,
                                    scroller = TRUE,
                                    dom = 'Bfrtip',
-                         buttons = c('copy', 'csv', 'excel', 'pdf')))
+                         #buttons = c('copy', 'csv', 'excel', 'pdf')))
+                         buttons = list('copy', 'print', list(
+        extend = 'collection',
+        buttons = c('csv', 'excel', 'pdf'),
+        text = 'Download'))))
 
 lista_cursos
 
     
-    # formattable(ameacadas, 
-#             align =c("l","l","c"), list(`Especie` = formatter("span", style = ~ style(color = "grey",font.style = "italic"))))
-
 ```
 
                            
@@ -1752,22 +1728,22 @@ Column-1 {data-width=500}
 
 #### **Os cursos ministrados pelo CEMAVE**
 
-Este relatório apresenta os resultados do processo de compilação, sistematização e análise de dados relativos aos cursos ministrados pelo Centro Nacional de Pesquisa e Conservação de Aves Silvestres – CEMAVE no período de 1978 a 2020. A iniciativa teve como objetivos sistematizar o esforço de capacitação realizado pelo Centro ao longo de sua existência e disponibilizar essa informação ao público em geral. Como para alguns cursos (especialmente os mais antigos) foram obtidas apenas informações parciais, nos  resultados aqui apresentados o número de registros considerados para diferentes variáveis pode diferir, a depender do aspecto avaliado. Apesar das lacunas detectadas nos registros levantados, procurou-se extrair a maior quantidade possível de informações dos dados disponíveis.
+Este relatório apresenta os resultados da compilação, sistematização e análise dos dados relativos aos cursos ministrados pelo Centro Nacional de Pesquisa e Conservação de Aves Silvestres – CEMAVE no período de 1978 a 2022. Esta iniciativa teve como objetivo organizar as informações referentes ao esforço de capacitação realizado pelo Centro ao longo de sua existência e disponibilizá-las ao público em geral. Ressaltamos que para alguns cursos (especialmente os mais antigos) foram obtidas apenas informações parciais. Em alguns casos, por exemplo, obteve-se o número de alunos participantes, mas não foi localizada a lista dos nomes e instituições de origem. Para outros cursos a carga horária foi estimada a partir do programa e houve ainda casos em que não foi possível idenficar o ano de execução. Por essas razões, a quantidade de registros variou entre os diversos aspectos analisados e os resultados apresentados refletem as limitações do conjunto de dados. Apesar das lacunas identificadas, procurou-se extrair a maior quantidade possível de informações do conjunto de dados disponível.
 
-Nas primeiras décadas predominaram no CEMAVE os cursos sobre aves com foco em atividades práticas em campo (p. ex.: capturas com redes de neblina, anilhamento, identificação e registros comportamentais) e que incluiam a execução de pequenos projetos em grupo ou individualmente. Os cursos eram, em geral, mais longos (9, 10, 11, até 17 dias). Com o passar dos anos houve uma tendência de redução na duração dos cursos, com uma progressiva convergência para o predomínio de cursos com 5 dias (40 horas – uma semana). Esses treinamentos, com foco nas atividades práticas de campo e capacitação para o anilhamento estão, até hoje, fortemente associados à imagem institucional do CEMAVE como centro especializado em pesquisa e conservação de aves, nacionalmente conhecido e reconhecido pela comunidade ornitológica do país. As iniciativas de capacitação do Centro estão intrinsicamente ligadas ao seu próprio processo de criação e ao interesse e necessidade existentes, à época, na formação de profissionais para atuar na pesquisa e conservação de aves no Brasil.  
+Nas primeiras décadas predominaram no CEMAVE os cursos sobre aves com foco em atividades práticas em campo (p. ex.: capturas com redes de neblina, anilhamento, identificação e registros comportamentais) e que incluiam a execução de pequenos projetos em grupo ou individualmente. Os cursos eram, em geral, mais longos (9, 10, 11, até 17 dias). Com o passar dos anos houve uma tendência de redução na duração dos cursos, com uma progressiva convergência e predomínio de cursos com 5 dias (40 horas – uma semana). Esses treinamentos, com foco nas atividades práticas de campo e capacitação para o anilhamento estão, até hoje, fortemente associados à imagem institucional do CEMAVE como centro especializado em pesquisa e conservação de aves, nacionalmente conhecido e reconhecido pela comunidade ornitológica do país. As iniciativas de capacitação do Centro estão intrinsicamente ligadas ao seu próprio processo de criação e ao interesse e necessidade existentes, à época, na formação de profissionais para atuar na pesquisa e conservação de aves no Brasil.  
 
 Ao longo dos anos o Centro ministrou também cursos de menor duração, voltados à capacitação de um público atuante na área de fiscalização/proteção e reabilitação de aves (cursos voltados especialmente aos fiscais do Ibama, de órgãos ambientais estaduais e também a profissionais de Centros de Triagem de Animais Silvestres - CETAS). A demanda por esse tipo de curso vem aumentando em anos recentes, reflexo possivelmente também das ações previstas nos Planos de Ação Nacionais para a conservação de espécies ameaçadas. Nos últimos anos têm surgido ainda demandas pontuais no âmbito acadêmico para cursos mais teóricos sobre biologia e conservação de aves e sobre as ações desenvolvidas pelo CEMAVE, incluindo treinamentos para o uso de aves em programas de monitoramento. Esse cenário geral parece ter contribuído para o aumento do número de cursos ministrados no período de 2010 a 2020.
 
-Os cursos ministrados pelo CEMAVE têm uma grande abrangência tanto em termos geográficos quanto em termos da área de atuação de origem dos alunos. Já ministramos cursos em grande parte dos estados brasileiros, alcançando alunos com diferentes perfis de atuação profissional, provenientes de 26 estados e de todas as regiões do país, além de alguns alunos de países vizinhos. Atualmente há espaço para ampliação do número de participantes provenientes de instituições de ensino e pesquisa, seja como cursistas ou como instrutores.
+Os cursos ministrados pelo CEMAVE têm uma grande abrangência tanto em termos geográficos quanto em relação à área de atuação de origem dos alunos. Já ministramos cursos em grande parte dos estados brasileiros, para alunos com diferentes perfis de atuação profissional, provenientes de 26 estados e de todas as regiões do país (além de alguns alunos de países vizinhos).
 
 
 Interessado em participar de um curso oferecido pelo CEMAVE?  
 
-Visite regularmente [nosso site](https://www.icmbio.gov.br/cemave) e siga nosso [instagram](https://www.instagram.com/icmbio.cemave/?hl=pt) para receber informações sobre o lançamento dos editais para nossos treinamentos.  
+Visite regularmente [nosso site](https://www.gov.br/icmbio/pt-br/assuntos/centros-de-pesquisa/aves) e siga nosso [instagram](https://www.instagram.com/icmbio.cemave/?hl=pt) para receber informações sobre o lançamento dos editais para nossos treinamentos.  
 
 
 
-Documento gerado em **'`r format(Sys.Date(), "%d %B de %Y")`'**.
+Documento gerado em **`r format(Sys.Date(), "%d %B de %Y")`**.
 
 
 Column-2 {data-width = 500}
@@ -1777,35 +1753,46 @@ Column-2 {data-width = 500}
 
 ####
 
-```{r logo cemave, echo = FALSE, out.width = '15%', fig.align = "center"}
+<div style='display:flex; flex-direction:row; justify-content:space-evenly; align-items:center;'>
 
-knitr::include_graphics('figs/logo-cemave.jpg')
-
-```
+<div>
 
 
+<center>[![logo-cemave](figs/logo-cemave.jpg "CEMAVE"){width=40% height=40%}](https://www.gov.br/icmbio/pt-br/assuntos/centros-de-pesquisa/aves) [![logo -SNA](figs/logo-sna.jpg "SNA"){width=40% height=40%}](https://www.ibama.gov.br/sna/recuperacao.php)</center>
 
-```{r logo SNA, echo = FALSE, out.width = '15%', fig.align="center"}
 
-knitr::include_graphics('figs/logo-sna.jpg') 
+<br>
 
-```
+</div>
+
+
+</div>
+
 
 <center>
 
-#### **Centro Nacional de Pesquisa e Conservação de Aves Silvestres - CEMAVE**  
 
+**Centro Nacional de Pesquisa e Conservação de Aves Silvestres - CEMAVE**  
+Floresta Nacional da Restinga de Cabedelo – ICMBio  
+BR-230 - Km 10 Renascer  
+58108-012 Cabedelo, PB  
+
+Tels: 83 3245-5001 / 3245-5278  
 *cemave.sede@icmbio.gov.br*
 
-</center>
+
+<br>
 
 -------------------------------------------------------------------------------
 
 
-```{r logo ICMBio, echo = FALSE, out.width = '40%', fig.align="center"}
 
-knitr::include_graphics('figs/logo-icmbio.png') 
-
-```
+<center>[![logo-cemave](figs/logo-icmbio.png "ICMBio"){width=40% height=40%}](https://www.gov.br/icmbio/pt-br)</center>
 
 
+**Instituto Chico Mendes de Conservação da Biodiversidade - ICMBio**  
+Complexo Administrativo EQSW 103/104 s/n  
+Cruzeiro/Sudoeste/Octogonal  
+70670-350 Brasília, DF   
+
+</center>
