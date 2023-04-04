@@ -1758,7 +1758,7 @@ Column-2 {data-width = 500}
 <div>
 
 
-<center>[![logo-cemave](figs/logo-cemave.jpg "CEMAVE"){width=40% height=40%}](https://www.gov.br/icmbio/pt-br/assuntos/centros-de-pesquisa/aves) [![logo -SNA](figs/logo-sna.jpg "SNA"){width=40% height=40%}](https://www.ibama.gov.br/sna/recuperacao.php)</center>
+<center>[![logo-cemave](figs/logo-cemave.jpg "CEMAVE"){width=40% height=30%}](https://www.gov.br/icmbio/pt-br/assuntos/centros-de-pesquisa/aves) [![logo -SNA](figs/logo-sna.jpg "SNA"){width=40% height=40%}](https://www.ibama.gov.br/sna/recuperacao.php)</center>
 
 
 <br>
@@ -1787,7 +1787,7 @@ Tels: 83 3245-5001 / 3245-5278
 
 
 
-<center>[![logo-cemave](figs/logo-icmbio.png "ICMBio"){width=40% height=40%}](https://www.gov.br/icmbio/pt-br)</center>
+<center>[![logo-cemave](figs/logo-icmbio.png "ICMBio"){width=40% height=30%}](https://www.gov.br/icmbio/pt-br)</center>
 
 
 **Instituto Chico Mendes de Conservação da Biodiversidade - ICMBio**  
