@@ -656,7 +656,7 @@ G3 <- ggplot(cursos, aes(y = instrutores)) +
         panel.grid.major.y = element_blank(),
         ) +
         #theme(axis.line = element_line(colour = "#FFFFFF", size = 1)
-        scale_y_continuous(breaks = seq(0, 17.5, by = 2.5), name = " ")
+        scale_y_continuous(breaks = seq(0, 16, by = 2.0), name = " ")
        
 ggplotly(G3)
 
@@ -1387,7 +1387,9 @@ tab_participantes <- tabela_participantes %>%
 "096"="Campus da Universidade Federal Rural da Amazônia - UFRA",
 "097"="Reserva Biológica de Guaribas")) %>% 
 
-
+mutate(participantes = recode(participantes,
+                      "Albano Schultz Neto"="Albano Schulz Neto")) %>% 
+                      
 #tab_participantes2 <- tab_participantes %>%
     #filter(is.na()) %>%
     arrange(desc(ano), desc(ID), curso, UF, participantes) %>%
@@ -1723,7 +1725,7 @@ Sobre {data-orientation=columns}
 Column-1 {data-width=500}
 ------------------------------------------------------------------
 
-### Última atualização deste **Relatório**: **05/04/2023**
+### Última atualização deste Relatório: **05/04/2023**
 
 
 #### **Os cursos ministrados pelo CEMAVE**
@@ -1740,7 +1742,6 @@ Os cursos ministrados pelo CEMAVE têm uma grande abrangência tanto em termos g
 Interessado em participar de um curso oferecido pelo CEMAVE?  
 
 Visite regularmente [nosso site](https://www.gov.br/icmbio/pt-br/assuntos/centros-de-pesquisa/aves) e siga nosso [instagram](https://www.instagram.com/icmbio.cemave/?hl=pt) para receber informações sobre o lançamento dos editais para nossos treinamentos.  
-
 
 
 Documento gerado em **`r format(Sys.Date(), "%d %B de %Y")`**.
