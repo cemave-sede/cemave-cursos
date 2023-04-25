@@ -1164,7 +1164,7 @@ lista_cursos <- datatable(tab1,
                          #buttons = c('copy', 'csv', 'excel', 'pdf')))
                          buttons = list('copy', 'print', list(
         extend = 'collection',
-        buttons = c('csv', 'excel', 'pdf'),
+        buttons = c('csv', 'excel'),
         text = 'Download'))))
 
 lista_cursos  
@@ -1422,7 +1422,7 @@ lista_cursos <- datatable(tab_participantes,
                          #buttons = c('copy', 'csv', 'excel', 'pdf')))
                          buttons = list('copy', 'print', list(
         extend = 'collection',
-        buttons = c('csv', 'excel', 'pdf'),
+        buttons = c('csv', 'excel'),
         text = 'Download'))))
 
 lista_cursos
