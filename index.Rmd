@@ -701,6 +701,8 @@ Row
 # -------------------------  Instrutores mais ativos
 
 G16 <-  instrutores %>%
+        mutate(participantes = recode(participantes,
+                      "Albano Schultz Neto"="Albano Schulz Neto")) %>% 
         group_by(participantes) %>%
         summarise(count = n()) %>% 
         arrange(desc(count)) %>% 
