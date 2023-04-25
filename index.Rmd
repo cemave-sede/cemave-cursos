@@ -1744,7 +1744,7 @@ Interessado em participar de um curso oferecido pelo CEMAVE?
 Visite regularmente [nosso site](https://www.gov.br/icmbio/pt-br/assuntos/centros-de-pesquisa/aves) e siga nosso [instagram](https://www.instagram.com/icmbio.cemave/?hl=pt) para receber informações sobre o lançamento dos editais para nossos treinamentos.  
 
 
-Documento gerado em **`r format(Sys.Date(), "%d %B de %Y")`**.
+Documento gerado em `r format(Sys.Date(), "%d %B de %Y")`.
 
 
 Column-2 {data-width = 500}
