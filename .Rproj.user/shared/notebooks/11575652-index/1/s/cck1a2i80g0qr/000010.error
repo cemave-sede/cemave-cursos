@@ -1,1 +1,0 @@
-{"frames":[],"message":"Error in full_join(cursos, alunos, by = \"ID\") : \n  could not find function \"full_join\"\n"}
