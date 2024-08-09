@@ -693,7 +693,7 @@ ggplotly(G15)
 
 Row 
 ---------------------------------------------------------------------
-### **Instrutores mais ativos**
+### **Instrutores com mais participações**
 
 
 ```{r imagem Instrutores mais ativos}
@@ -1032,8 +1032,8 @@ mapa <- leaflet() %>%
   setView(lng = -58, lat = -14,
            zoom = 4) %>%
   #addProviderTiles(providers$Esri.WorldImagery, group = "Imágenes de ESRI") %>%
-  addProviderTiles(providers$Stamen.TonerLite, group = "Stamen Toner Lite") %>%
-  #addProviderTiles(providers$OpenStreetMap.Mapnik, group = "Open Street Map") %>%
+  #addProviderTiles(providers$Stamen.TonerLite, group = "Stamen Toner Lite") %>%
+  addProviderTiles(providers$OpenStreetMap.Mapnik, group = "Open Street Map") %>%
     # Overlay groups
     
     # addTiles() %>% 
@@ -1065,8 +1065,8 @@ mapa <- leaflet() %>%
 # Layers Control
 
     addLayersControl(
-        baseGroups = c(#"OpenStreetMap",
-                       "Stamen Toner Lite)"),
+        baseGroups = c("OpenStreetMap"),
+                       #"Stamen Toner Lite)"),
                        #"Imágenes de ESRI"), 
         overlayGroups = c("Cursos",
                           "Alunos",
